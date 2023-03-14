@@ -14,6 +14,7 @@ import innui.bases;
 import innui.formularios.controles;
 import static innui.formularios.controles.k_opciones_mapa_no_requerido;
 import static innui.formularios.formularios.k_fase_procesamiento;
+import static innui.formularios.formularios.k_importar_no_encontrado;
 import innui.modelos.configuraciones.ResourceBundles;
 import innui.modelos.errores.oks;
 import innui.modelos.internacionalizacion.tr;
@@ -22,6 +23,8 @@ import inweb.modelos_html.formularios.control_textareas;
 import inweb.modelos_html.formularios.web_formularios;
 import static inweb.modelos_html.formularios.web_formularios.k_valores_mapa_mensaje_error_tex;
 import static inweb.modelos_html.formularios.web_formularios.k_valores_mapa_valor_tex;
+import static inweb.spring.formulario_simple_servidor_https_spring.controlador.Con_formulario_simple_servidor_https_spring.k_in_ruta;
+import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.Date;
@@ -295,33 +298,51 @@ public class Formulario_simple extends bases {
         }
         return ok.es;
     }    
-    public boolean procesar(Map<String, Object> datos_mapa, oks ok, Object ... extras_array) throws Exception {
+    public boolean procesar_desde_servidor_https(Map<String, String[]> datos_mapa, oks ok, Object ... extras_array) throws Exception {
         ResourceBundle in;
         try {
             if (ok.es == false) { return ok.es; }
-            String clave, valor;
-            List<Entry<String, Object>> formulario_simple_claves_valor_lista = new LinkedList<>();
-            Entry<String, Object> nueva_entrada;
-            for(Entry<String, Object> entry: datos_mapa.entrySet()) {
+            String clave;
+            String [] valor;
+            Map.Entry nueva_entrada;
+            List<Map.Entry<String, Object>> formulario_simple_claves_valor_lista = new LinkedList<>();
+            for(Map.Entry<String, String[]> entry: datos_mapa.entrySet()) {
                 clave = entry.getKey();
-                valor = entry.getValue().toString();
-                clave = clave.replaceAll("^\\.+\\[\\s*\\d+\\s*\\]$", "");
-                nueva_entrada = new SimpleEntry<>(clave, valor);
-                formulario_simple_claves_valor_lista.add(nueva_entrada);
+                valor = entry.getValue();
+                int i = 0;
+                int tam = valor.length;
+                while (true) {
+                    if (i >= tam) {
+                        break;
+                    }
+                    nueva_entrada = new AbstractMap.SimpleEntry<>(clave, valor[i]);
+                    formulario_simple_claves_valor_lista.add(nueva_entrada);
+                    i = i + 1;
+                }
             }
+            construir_formulario_simple(ok);
+            if (ok.es == false) { return false; }
+            formulario_simple.iniciar(k_fragmentos_principales_ruta, formulario_simple_valores_mapa, null, ok);
+            if (ok.es == false) { return false; }
             formulario_simple.importar_valores(formulario_simple_claves_valor_lista, ok);
-            if (ok.es == false) { return ok.es; }
+            if (ok.es == false) { 
+                if (ok.id.equals(k_importar_no_encontrado) == false) {
+                    return false;
+                } else {
+                    ok.iniciar();
+                }
+            }
             formulario_simple.procesar(ok);
-            if (ok.es == false) { return ok.es; }
+            if (ok.es == false) { return false; }
             String error_tex = formulario_simple.valores_mapa.get(k_valores_mapa_mensaje_error_tex);
             if (error_tex.isEmpty()) {
                 in = ResourceBundles.getBundle(k_in_ruta);
                 error_tex = tr.in(in, "Formulario completado con éxito. ");
                 formulario_simple.valores_mapa.put(k_valores_mapa_mensaje_error_tex, error_tex);
             }
-            if (ok.es == false) { return ok.es; }
+            if (ok.es == false) { return false; }
             capturar_formulario_simple(formulario_simple.getValores_mapa(), ok);
-            if (ok.es == false) { return ok.es; }
+            if (ok.es == false) { return false; }
         } catch (Exception e) {
             ok.setTxt(e);
         }

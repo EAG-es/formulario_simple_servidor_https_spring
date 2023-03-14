@@ -5,6 +5,8 @@
     </head>
     <body>
         <div th:insert="~{formulario_simple/fragmentos/fragmentos_principales :: cabecera}"></div>
+        <form th:action="formulario_simple" method="POST">
         <div th:utext="${formulario_simple_tex}"></div>
+        </form>
     </body>
 </html>
