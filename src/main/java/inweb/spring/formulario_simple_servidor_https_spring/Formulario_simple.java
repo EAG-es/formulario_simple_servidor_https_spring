@@ -23,16 +23,13 @@ import inweb.modelos_html.formularios.control_textareas;
 import inweb.modelos_html.formularios.web_formularios;
 import static inweb.modelos_html.formularios.web_formularios.k_valores_mapa_mensaje_error_tex;
 import static inweb.modelos_html.formularios.web_formularios.k_valores_mapa_valor_tex;
-import static inweb.spring.formulario_simple_servidor_https_spring.controlador.Con_formulario_simple_servidor_https_spring.k_in_ruta;
 import java.util.AbstractMap;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 /**
