@@ -60,7 +60,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>                            
                             <classpathPrefix>./</classpathPrefix>
-                            <mainClass>inweb.spring.formulario_simple_servidor_https_spring.formulario_simple_servidor_https_spring</mainClass>
+                            <mainClass>inweb.spring.formulario_simple_servidor_https_spring.Formulario_simple_servidor_https_spring</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
