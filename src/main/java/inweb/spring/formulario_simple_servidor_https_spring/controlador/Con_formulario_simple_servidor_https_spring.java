@@ -39,8 +39,6 @@ public class Con_formulario_simple_servidor_https_spring {
                 formulario_simple.formulario_simple_valores_mapa.put(k_valores_mapa_url_destino_tex, k_formulario_simple);
                 formulario_simple.formulario_simple_valores_mapa.put(k_valores_mapa_metodo_tex, "POST");
                 // Si el metodo de envio es POST no se pueden usar las etiquetas <form> preconstruidas
-                formulario_simple.formulario_simple.configurar_sin_form(ok);
-                if (ok.es == false) { break; }
                 formulario_simple.capturar(ok);
                 break;
             }
